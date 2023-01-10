@@ -19,14 +19,14 @@ export default function Meal({index, meal, onPress}) {
           index % 2 === 0 ? styles.leftImage : styles.rightImage,
         ]}
         source={{
-          uri: 'https://www.themealdb.com/images/media/meals/qtuuys1511387068.jpg',
+          uri: meal.strMealThumb,
         }}>
         <Text
           style={[
             styles.title,
             index % 2 === 0 ? styles.leftTitle : styles.rightTitle,
           ]}>
-          {meal.title}
+          {meal.strMeal}
         </Text>
       </ImageBackground>
     </TouchableOpacity>

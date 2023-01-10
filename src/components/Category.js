@@ -12,10 +12,10 @@ export default function Category({index, category, onPress}) {
         <Image
           style={styles.image}
           source={{
-            uri: 'https://raw.githubusercontent.com/Kodluyoruz/taskforce/main/react-native/odev_3/figures/tarifka_1.png',
+            uri: category.strCategoryThumb,
           }}
         />
-        <Text style={styles.title}>{category.title}</Text>
+        <Text style={styles.title}>{category.strCategory}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -43,8 +43,8 @@ const styles = StyleSheet.create({
     borderRightWidth: 0,
   },
   image: {
-    height: 40,
-    width: 40,
+    height: 60,
+    width: 100,
     resizeMode: 'contain',
     marginRight: 10,
   },

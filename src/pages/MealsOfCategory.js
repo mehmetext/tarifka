@@ -1,18 +1,28 @@
-import {FlatList, StyleSheet, View} from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React from 'react';
 import Meal from '../components/Meal';
+import useFetch from '../hooks/useFetch';
 
-export default function MealsOfCategory({navigation}) {
-  const data = [
-    {id: 1, image: 'asd', title: 'Beef and Mustard Pie'},
-    {id: 2, image: 'asd', title: 'Beef and Oyster pie'},
-  ];
+export default function MealsOfCategory({navigation, route}) {
+  const {loading, error, data} = useFetch(
+    `https://www.themealdb.com/api/json/v1/1/filter.php?c=${route.params.category}`,
+  );
 
   function renderItem({index, item}) {
     return (
       <Meal
         onPress={() => {
-          navigation.navigate('MealDetail', {name: item.title});
+          navigation.navigate('MealDetail', {
+            name: item.strMeal,
+            id: item.idMeal,
+          });
         }}
         index={index}
         meal={item}
@@ -20,17 +30,29 @@ export default function MealsOfCategory({navigation}) {
     );
   }
 
+  if (loading) {
+    return <ActivityIndicator style={styles.loading} size={'large'} />;
+  }
+
+  if (error) {
+    return <Text>{`${error}`}</Text>;
+  }
+
   return (
-    <FlatList
-      contentContainerStyle={styles.listContent}
-      data={data}
-      renderItem={renderItem}
-      ItemSeparatorComponent={<View style={styles.separator} />}
-    />
+    <SafeAreaView>
+      <FlatList
+        keyExtractor={item => item.idMeal}
+        contentContainerStyle={styles.listContent}
+        data={data.meals}
+        renderItem={renderItem}
+        ItemSeparatorComponent={<View style={styles.separator} />}
+      />
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   listContent: {paddingVertical: 10},
   separator: {height: 10},
+  loading: {marginTop: 10},
 });

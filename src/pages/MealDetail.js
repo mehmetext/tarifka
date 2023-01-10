@@ -1,5 +1,7 @@
 import {
+  ActivityIndicator,
   Image,
+  Linking,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -8,30 +10,43 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
+import useFetch from '../hooks/useFetch';
 
-export default function MealDetail({meal}) {
+export default function MealDetail({navigation, route}) {
+  const {loading, error, data} = useFetch(
+    `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${route.params.id}`,
+  );
+
+  if (loading) {
+    return <ActivityIndicator style={styles.loading} size={'large'} />;
+  }
+
+  if (error) {
+    return <Text>{`${error}`}</Text>;
+  }
+
+  async function handleOpenYt() {
+    const supported = await Linking.canOpenURL(data.meals[0].strYoutube);
+
+    if (supported) {
+      await Linking.openURL(data.meals[0].strYoutube);
+    }
+  }
+
   return (
     <SafeAreaView>
       <ScrollView>
         <Image
           style={styles.image}
           source={{
-            uri: 'https://www.themealdb.com/images/media/meals/qtuuys1511387068.jpg',
+            uri: data.meals[0].strMealThumb,
           }}
         />
-        <Text style={styles.title}>Meal Title</Text>
-        <Text style={styles.subtitle}>Meal Country</Text>
+        <Text style={styles.title}>{data.meals[0].strMeal}</Text>
+        <Text style={styles.subtitle}>{data.meals[0].strArea}</Text>
         <View style={styles.divider} />
-        <Text style={styles.desc}>
-          {
-            'Preheat oven to 350° F. Spray a 9x13-inch baking pan with non-stick spray.\r\nCombine soy sauce, ½ cup water, brown sugar, ginger and garlic in a small saucepan and cover. Bring to a boil over medium heat. Remove lid and cook for one minute once boiling.\r\nMeanwhile, stir together the corn starch and 2 tablespoons of water in a separate dish until smooth. Once sauce is boiling, add mixture to the saucepan and stir to combine. Cook until the sauce starts to thicken then remove from heat.\r\nPlace the chicken breasts in the prepared pan. Pour one cup of the sauce over top of chicken. Place chicken in oven and bake 35 minutes or until cooked through. Remove from oven and shred chicken in the dish using two forks.\r\n*Meanwhile, steam or cook the vegetables according to package directions.\r\nAdd the cooked vegetables and rice to the casserole dish with the chicken. Add most of the remaining sauce, reserving a bit to drizzle over the top when serving. Gently toss everything together in the casserole dish until combined. Return to oven and cook 15 minutes. Remove from oven and let stand 5 minutes before serving. Drizzle each serving with remaining sauce. Enjoy!'
-          }
-        </Text>
-        <TouchableOpacity
-          style={styles.ytBtn}
-          onPress={() => {
-            console.log('open on yt');
-          }}>
+        <Text style={styles.desc}>{data.meals[0].strInstructions}</Text>
+        <TouchableOpacity style={styles.ytBtn} onPress={handleOpenYt}>
           <Text style={styles.ytText}>Watch on YouTube</Text>
         </TouchableOpacity>
       </ScrollView>
@@ -75,4 +90,5 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 20,
   },
+  loading: {marginTop: 10},
 });
