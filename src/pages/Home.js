@@ -2,14 +2,24 @@ import {FlatList, StyleSheet, View} from 'react-native';
 import React from 'react';
 import Category from '../components/Category';
 
-export default function Home() {
+export default function Home({navigation}) {
   const data = [
     {id: 1, image: 'asd', title: 'Beef'},
     {id: 2, image: 'asd', title: 'Chicken'},
   ];
 
   function renderItem({index, item}) {
-    return <Category index={index} category={item} />;
+    return (
+      <Category
+        onPress={() => {
+          navigation.navigate('MealsOfCategory', {
+            name: `Meals of ${item.title}`,
+          });
+        }}
+        index={index}
+        category={item}
+      />
+    );
   }
 
   return (

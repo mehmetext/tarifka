@@ -1,21 +1,23 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 
-export default function Category({index, category}) {
+export default function Category({index, category, onPress}) {
   return (
-    <View
-      style={[
-        styles.container,
-        index % 2 === 0 ? styles.leftContainer : styles.rightContainer,
-      ]}>
-      <Image
-        style={styles.image}
-        source={{
-          uri: 'https://raw.githubusercontent.com/Kodluyoruz/taskforce/main/react-native/odev_3/figures/tarifka_1.png',
-        }}
-      />
-      <Text style={styles.title}>{category.title}</Text>
-    </View>
+    <TouchableOpacity onPress={onPress}>
+      <View
+        style={[
+          styles.container,
+          index % 2 === 0 ? styles.leftContainer : styles.rightContainer,
+        ]}>
+        <Image
+          style={styles.image}
+          source={{
+            uri: 'https://raw.githubusercontent.com/Kodluyoruz/taskforce/main/react-native/odev_3/figures/tarifka_1.png',
+          }}
+        />
+        <Text style={styles.title}>{category.title}</Text>
+      </View>
+    </TouchableOpacity>
   );
 }
 
