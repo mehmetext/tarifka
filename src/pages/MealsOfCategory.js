@@ -9,7 +9,15 @@ export default function MealsOfCategory({navigation}) {
   ];
 
   function renderItem({index, item}) {
-    return <Meal onPress={() => {}} index={index} meal={item} />;
+    return (
+      <Meal
+        onPress={() => {
+          navigation.navigate('MealDetail', {name: item.title});
+        }}
+        index={index}
+        meal={item}
+      />
+    );
   }
 
   return (

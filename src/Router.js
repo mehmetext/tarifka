@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from './pages/Home';
 import MealsOfCategory from './pages/MealsOfCategory';
+import MealDetail from './pages/MealDetail';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +19,11 @@ export default function Router() {
         <Stack.Screen
           name="MealsOfCategory"
           component={MealsOfCategory}
+          options={({route}) => ({headerTitle: route.params.name})}
+        />
+        <Stack.Screen
+          name="MealDetail"
+          component={MealDetail}
           options={({route}) => ({headerTitle: route.params.name})}
         />
       </Stack.Navigator>
